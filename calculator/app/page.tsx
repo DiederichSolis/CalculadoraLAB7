@@ -1,5 +1,5 @@
-"use client"
-import { useState } from 'react'
+"use client";
+import { useState } from 'react';
 
 export default function Home() {
   const [result, setResult] = useState('');
@@ -8,15 +8,26 @@ export default function Home() {
   const handleButtonClick = (value: string) => {
     if (value === '=') {
       try {
-        setResult(eval(expression).toString());
+        const evaluatedResult = eval(expression);
+
+        if (evaluatedResult < 0) {
+          setResult('ERROR');
+        } else if (evaluatedResult > 999999999) {
+          setResult('ERROR');
+        } else {
+          setResult(evaluatedResult.toString());
+        }
       } catch (error) {
-        setResult('Error');
+        setResult('ERROR');
       }
     } else if (value === 'C') {
       setResult('');
       setExpression('');
     } else {
-      setExpression((prevExpression) => prevExpression + value);
+      // Prevent adding more than 9 characters
+      if (expression.length < 9) {
+        setExpression((prevExpression) => prevExpression + value);
+      }
     }
   };
 
@@ -57,5 +68,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  )
+  );
 }
